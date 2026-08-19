@@ -1081,8 +1081,8 @@ var GUIDES = [
     cat: "refund",
     icon: "💎",
     thumb: "t3",
-    title: "完整港澳开户攻略包（电子版）",
-    desc: "23 篇深度攻略合集：CNID 线上开户全银行实测 + 香港信用卡下卡案例与避坑清单。",
+    title: "完整港澳开户攻略包（电子版 PDF）",
+    desc: "22 篇深度攻略合集 PDF：CNID 线上开户全银行实测 + 香港信用卡下卡案例与避坑清单，付款后即时下载。",
     tags: ["付费", "攻略包", "开户", "信用卡", "电子版"],
     paid: true,
     price: "US$9.90",
@@ -1099,7 +1099,8 @@ var GUIDES = [
       ]},
       {type:"warn", text:"本站只做流程科普与攻略整理，不代办、不中介、不陪开户，也不提供任何套现或规避监管的服务。攻略内容仅供参考，政策以各银行官方为准。"},
       {type:"h2", text:"购买方式"},
-      {type:"p", text:"点击下方按钮，通过 Stripe 安全支付（支持银行卡、Apple Pay、Google Pay、支付宝等）。支付成功后即可获取电子版攻略包。"},
+      {type:"p", text:"点击下方按钮，通过 Stripe 安全支付（支持银行卡、Apple Pay、Google Pay、支付宝等）。支付成功后会自动跳转到 PDF 下载页，即可获取完整攻略包（22 篇，45 页 A4）。"},
+      {type:"info", text:"PDF 下载链接：https://github.com/leosky99/huachali-site/releases/download/v1.0/doorgo-guide-pack.pdf（若付款后未能自动跳转，也可直接用此链接下载，或联系 leosky995@gmail.com 获取。）"},
       {type:"buy", text:"立即购买 · US$9.90", url:"https://buy.stripe.com/28EcN75K7exG4bP44TbQY01"}
     ]
   }
