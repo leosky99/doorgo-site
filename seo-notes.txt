@@ -1,1 +1,1 @@
-DoorGo SEO V2: publish sitemap with the production canonical hostname before enabling the Sitemap directive in robots.txt. Current sitemap is a baseline placeholder because the production domain is not stored in the repository.
+DoorGo SEO: canonical production hostname is https://doorgo.vercel.app/. sitemap.xml and robots.txt point at it. getdoorgo.vercel.app and huachali.vercel.app should redirect to it. If the canonical domain changes, update these files together.
