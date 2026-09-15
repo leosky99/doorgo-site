@@ -21,10 +21,15 @@
   function installTopButton(){var old=document.querySelector('.to-top');if(old)old.remove();var b=document.createElement('button');b.type='button';b.className='to-top';b.textContent='↑';b.setAttribute('aria-label','回到顶部');b.hidden=true;b.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});document.body.appendChild(b);function sync(){b.hidden=window.scrollY<520;}window.addEventListener('scroll',sync,{passive:true});sync();}
 })();
 
+function escapeHtml(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');}
+function safeUrl(value){try{var u=new URL(value,location.href);return /^https?:$/.test(u.protocol)?u.href:'#';}catch(e){return '#';}}
+function setMeta(property,content){var meta=document.head.querySelector('meta[property="'+property+'"]');if(!meta){meta=document.createElement('meta');meta.setAttribute('property',property);document.head.appendChild(meta);}meta.setAttribute('content',content);}
+function setArticleMeta(guide){var title=guide.title+'｜DoorGo 港澳开户与信用卡攻略',desc=guide.desc||'DoorGo 港澳开户与香港信用卡实用攻略。';document.title=title;var meta=document.querySelector('meta[name="description"]');if(meta)meta.setAttribute('content',desc);setMeta('og:title',title);setMeta('og:description',desc);setMeta('og:type','article');}
+
 function openGuide(id){
   var guide=GUIDES.find(function(g){return g.id===id;});if(!guide)return;
   var CAT_LABEL={account:'港澳开户',card:'香港信用卡',refund:'付费服务'};
-  function safe(v){return String(v==null?'':v);}
+  function safe(v){return escapeHtml(v);}
   function renderBlock(b){switch(b.type){case'h2':return'<h2>'+safe(b.text)+'</h2>';case'h3':return'<h3>'+safe(b.text)+'</h3>';case'p':return'<p>'+safe(b.text)+'</p>';case'ul':return'<ul>'+b.items.map(function(it){return'<li>'+safe(it)+'</li>';}).join('')+'</ul>';case'ol':return'<ol>'+b.items.map(function(it){return'<li>'+safe(it)+'</li>';}).join('')+'</ol>';case'tip':return'<div class="tip-box"><b>💡 实用 Tips：</b>'+safe(b.text)+'</div>';case'warn':return'<div class="warn-box"><b>⚠️ 注意：</b>'+safe(b.text)+'</div>';case'info':return'<div class="info-box"><b>ℹ️ 说明：</b>'+safe(b.text)+'</div>';case'referral':return'<div class="referral-box"><div class="ref-title">'+safe(b.title||'🎁 我的推荐 / 邀请')+'</div><p>'+safe(b.text)+'</p><div class="ref-links">'+(b.links?b.links.map(function(l){return'<a href="'+safeUrl(l.url)+'" target="_blank" rel="noopener noreferrer">'+safe(l.label)+'</a>';}).join(''):'<span>邀请链接待更新</span>')+'</div></div>';case'buy':return'<div class="buy-box"><a class="btn buy-btn" href="'+safeUrl(b.url)+'" target="_blank" rel="noopener noreferrer">💳 '+safe(b.text)+'</a></div>';case'table':return'<div class="table-wrap"><table><thead><tr>'+b.head.map(function(h){return'<th>'+safe(h)+'</th>';}).join('')+'</tr></thead><tbody>'+b.rows.map(function(r){return'<tr>'+r.map(function(c){return'<td>'+safe(c)+'</td>';}).join('')+'</tr>';}).join('')+'</tbody></table></div>';default:return'';}}
   var tagHtml=(guide.tags||[]).map(function(t){return'<span class="tag-chip">'+safe(t)+'</span>';}).join('');var metaParts=['分类：'+(CAT_LABEL[guide.cat]||'攻略')];if(guide.updated)metaParts.push('更新：'+guide.updated);
   var updateNote=guide.updated?'本文整理时间：'+safe(guide.updated)+'。涉及银行政策、费率、奖励及审批条件，请在办理前再次核对官方渠道。':'本文涉及的信息可能发生变化，请在办理前再次核对官方渠道。';
