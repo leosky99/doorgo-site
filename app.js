@@ -8,43 +8,30 @@
   var CAT_LABEL = { account: '港澳开户', card: '香港信用卡', refund: '付费服务' };
 
   function escapeHtml(value) {
-    return String(value == null ? '' : value)
-      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+    return String(value == null ? '' : value).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
   }
-
   function setMeta(property, content) {
     var meta = document.head.querySelector('meta[property="' + property + '"]');
     if (!meta) { meta = document.createElement('meta'); meta.setAttribute('property', property); document.head.appendChild(meta); }
     meta.setAttribute('content', content);
   }
-
   function setArticleMeta(guide) {
     var title = guide.title + '｜DoorGo 港澳开户与信用卡攻略';
     var desc = guide.desc || 'DoorGo 港澳开户与香港信用卡实用攻略。';
     document.title = title;
-    var meta = document.querySelector('meta[name="description"]');
-    if (meta) meta.setAttribute('content', desc);
+    var meta = document.querySelector('meta[name="description"]'); if (meta) meta.setAttribute('content', desc);
     setMeta('og:title', title); setMeta('og:description', desc); setMeta('og:type', 'article');
   }
-
   function setHomeMeta() {
     document.title = 'DoorGo｜港澳开户、香港信用卡与跨境金融攻略';
-    var meta = document.querySelector('meta[name="description"]');
-    if (meta) meta.setAttribute('content', 'DoorGo 提供香港开户、香港信用卡与跨境金融流程攻略：材料清单、办理步骤、常见坑点、风险提示与实用对比。');
-    setMeta('og:title', 'DoorGo｜港澳开户、香港信用卡与跨境金融攻略');
-    setMeta('og:description', '先看懂规则，再准备材料，再行动。DoorGo 专注港澳开户与香港信用卡的实用攻略。');
-    setMeta('og:type', 'website');
+    var meta = document.querySelector('meta[name="description"]'); if (meta) meta.setAttribute('content', 'DoorGo 提供香港开户、香港信用卡与跨境金融流程攻略：材料清单、办理步骤、常见坑点、风险提示与实用对比。');
+    setMeta('og:title', 'DoorGo｜港澳开户、香港信用卡与跨境金融攻略'); setMeta('og:description', '先看懂规则，再准备材料，再行动。DoorGo 专注港澳开户与香港信用卡的实用攻略。'); setMeta('og:type', 'website');
   }
-
   function renderCategoryNav() {
     if (!catNav) return;
     var items = [['all', '全部'], ['account', '🏦 开户攻略'], ['card', '💳 信用卡'], ['paid', '💎 付费服务']];
-    catNav.innerHTML = items.map(function (item) {
-      return '<button type="button" data-cat="' + item[0] + '" class="' + (item[0] === currentCat ? 'active' : '') + '">' + item[1] + '</button>';
-    }).join('');
+    catNav.innerHTML = items.map(function (item) { return '<button type="button" data-cat="' + item[0] + '" class="' + (item[0] === currentCat ? 'active' : '') + '">' + item[1] + '</button>'; }).join('');
   }
-
   function matches(g) {
     var categoryMatch = currentCat === 'all' || (currentCat === 'paid' ? !!g.paid : g.cat === currentCat);
     if (!categoryMatch) return false;
@@ -53,63 +40,42 @@
     var hay = (g.title + ' ' + g.desc + ' ' + (g.tags || []).join(' ')).toLowerCase();
     return hay.indexOf(q) !== -1;
   }
-
   function cardHtml(g) {
     var tags = (g.tags || []).slice(0, 3).map(function (t) { return '<span class="tag-chip">' + escapeHtml(t) + '</span>'; }).join('');
-    var meta = [];
-    if (g.updated) meta.push('更新 ' + escapeHtml(g.updated));
-    if (g.tags && g.tags.length) meta.push(escapeHtml(g.tags.length) + ' 个标签');
+    var meta = []; if (g.updated) meta.push('更新 ' + escapeHtml(g.updated)); if (g.tags && g.tags.length) meta.push(g.tags.length + ' 个标签');
     return '<article class="guide" tabindex="0" role="link" aria-label="查看攻略：' + escapeHtml(g.title) + '" onclick="openGuide(\'' + g.id + '\')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openGuide(\'' + g.id + '\')}" data-guide-id="' + escapeHtml(g.id) + '">' +
-      '<div class="thumb ' + escapeHtml(g.thumb) + '">' + escapeHtml(g.icon) + '<span class="cat">' + escapeHtml(CAT_LABEL[g.cat] || '攻略') + '</span>' +
-      (g.hot ? '<span class="soon" style="background:#C75A4B">热门</span>' : '') +
-      (g.paid ? '<span class="soon" style="background:var(--gold)">' + escapeHtml(g.price || '付费') + '</span>' : '') +
-      '</div><div class="g-body"><h3>' + escapeHtml(g.title) + '</h3><p>' + escapeHtml(g.desc) + '</p>' +
-      (tags ? '<div class="meta-tags">' + tags + '</div>' : '') +
-      (meta.length ? '<div class="g-meta">' + meta.join(' · ') + '</div>' : '') +
-      '<div class="g-more">阅读全文 →</div></div></article>';
+      '<div class="thumb ' + escapeHtml(g.thumb) + '">' + escapeHtml(g.icon) + '<span class="cat">' + escapeHtml(CAT_LABEL[g.cat] || '攻略') + '</span>' + (g.hot ? '<span class="soon" style="background:#C75A4B">热门</span>' : '') + (g.paid ? '<span class="soon" style="background:var(--gold)">' + escapeHtml(g.price || '付费') + '</span>' : '') + '</div>' +
+      '<div class="g-body"><h3>' + escapeHtml(g.title) + '</h3><p>' + escapeHtml(g.desc) + '</p>' + (tags ? '<div class="meta-tags">' + tags + '</div>' : '') + (meta.length ? '<div class="g-meta">' + meta.join(' · ') + '</div>' : '') + '<div class="g-more">阅读全文 →</div></div></article>';
   }
-
   function renderGuides() {
-    renderCategoryNav();
-    var list = GUIDES.filter(matches);
+    renderCategoryNav(); var list = GUIDES.filter(matches);
     if (!list.length) { grid.innerHTML = '<p style="text-align:center;color:var(--muted);padding:32px">没有找到相关内容，换个关键词试试。</p>'; return; }
     if (currentCat === 'all' && !currentQuery) {
-      var groups = [{ key: 'account', label: '🏦 港澳开户' }, { key: 'card', label: '💳 香港信用卡' }, { key: 'paid', label: '💎 付费服务' }];
-      var html = '';
-      groups.forEach(function (grp) {
-        var items = list.filter(function (g) { return grp.key === 'paid' ? !!g.paid : g.cat === grp.key; });
-        if (!items.length) return;
-        html += '<div class="acc-group"><button class="group-title" type="button" onclick="toggleGroup(this)" aria-expanded="false"><span>' + grp.label + '</span><span class="acc-count">' + items.length + ' 篇</span><span class="acc-arrow" aria-hidden="true">▾</span></button><div class="group-cards acc-body" style="display:none">' + items.map(cardHtml).join('') + '</div></div>';
-      });
+      var groups = [{ key: 'account', label: '🏦 港澳开户' }, { key: 'card', label: '💳 香港信用卡' }, { key: 'paid', label: '💎 付费服务' }]; var html = '';
+      groups.forEach(function (grp) { var items = list.filter(function (g) { return grp.key === 'paid' ? !!g.paid : g.cat === grp.key; }); if (!items.length) return; html += '<div class="acc-group"><button class="group-title" type="button" onclick="toggleGroup(this)" aria-expanded="false"><span>' + grp.label + '</span><span class="acc-count">' + items.length + ' 篇</span><span class="acc-arrow" aria-hidden="true">▾</span></button><div class="group-cards acc-body" style="display:none">' + items.map(cardHtml).join('') + '</div></div>'; });
       grid.innerHTML = html;
     } else grid.innerHTML = list.map(cardHtml).join('');
   }
-
-  window.toggleGroup = function (btn) {
-    var body = btn.nextElementSibling, arrow = btn.querySelector('.acc-arrow');
-    if (!body) return;
-    var isOpen = body.style.display !== 'none';
-    body.style.display = isOpen ? 'none' : 'grid'; btn.setAttribute('aria-expanded', String(!isOpen));
-    if (arrow) arrow.textContent = isOpen ? '▾' : '▴';
-  };
-
+  window.toggleGroup = function (btn) { var body = btn.nextElementSibling, arrow = btn.querySelector('.acc-arrow'); if (!body) return; var isOpen = body.style.display !== 'none'; body.style.display = isOpen ? 'none' : 'grid'; btn.setAttribute('aria-expanded', String(!isOpen)); if (arrow) arrow.textContent = isOpen ? '▾' : '▴'; };
   if (catNav) catNav.addEventListener('click', function (e) { var btn = e.target.closest('button'); if (!btn) return; currentCat = btn.getAttribute('data-cat') || 'all'; renderGuides(); });
   if (searchInput) searchInput.addEventListener('input', function () { currentQuery = searchInput.value.trim(); renderGuides(); });
-
   window.openGuide = openGuide; window.copyGuideLink = copyGuideLink; window.showHome = showHome;
   renderGuides(); setHomeMeta();
-
   function openHashGuide() { var match = (window.location.hash || '').match(/^#guide=([^&]+)/); if (match) openGuide(decodeURIComponent(match[1])); }
   window.addEventListener('hashchange', openHashGuide); openHashGuide();
 
-  var topBtn = document.createElement('button'); topBtn.type = 'button'; topBtn.className = 'to-top'; topBtn.textContent = '↑'; topBtn.setAttribute('aria-label', '回到顶部'); topBtn.hidden = true;
-  topBtn.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); }); document.body.appendChild(topBtn);
-  window.addEventListener('scroll', function () { topBtn.hidden = window.scrollY < 520; }, { passive: true });
+  function installTopButton() {
+    var old = document.querySelector('.to-top'); if (old) old.remove();
+    var topBtn = document.createElement('button'); topBtn.type = 'button'; topBtn.className = 'to-top'; topBtn.textContent = '↑'; topBtn.setAttribute('aria-label', '回到顶部'); topBtn.hidden = true;
+    topBtn.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); }); document.body.appendChild(topBtn);
+    function sync() { topBtn.hidden = window.scrollY < 520; }
+    window.addEventListener('scroll', sync, { passive: true }); sync();
+  }
+  installTopButton();
 })();
 
 function openGuide(id) {
-  var guide = GUIDES.find(function (g) { return g.id === id; });
-  if (!guide) return;
+  var guide = GUIDES.find(function (g) { return g.id === id; }); if (!guide) return;
   var CAT_LABEL = { account: '港澳开户', card: '香港信用卡', refund: '付费服务' };
   function safe(v) { return String(v == null ? '' : v); }
   function renderBlock(b) {
@@ -130,10 +96,20 @@ function openGuide(id) {
   }
   var tagHtml = (guide.tags || []).map(function (t) { return '<span class="tag-chip">' + safe(t) + '</span>'; }).join('');
   var metaParts = ['分类：' + (CAT_LABEL[guide.cat] || '攻略')]; if (guide.updated) metaParts.push('更新：' + guide.updated);
+  var updateNote = guide.updated ? '本文整理时间：' + safe(guide.updated) + '。涉及银行政策、费率、奖励及审批条件，请在办理前再次核对官方渠道。' : '本文涉及的信息可能发生变化，请在办理前再次核对官方渠道。';
   var html = '<section class="article-hero"><div class="wrap"><div class="cat">' + safe(CAT_LABEL[guide.cat] || '攻略') + '</div><h1>' + safe(guide.title) + '</h1><div class="meta">' + metaParts.join(' · ') + '</div>' + (tagHtml ? '<div class="meta-tags">' + tagHtml + '</div>' : '') + '</div></section>' +
-    '<main class="wrap"><div class="article-body"><nav class="article-tools" aria-label="文章操作"><a class="back-link" href="' + location.pathname + location.search + '">← 返回攻略列表</a><button class="share-btn" type="button" onclick="copyGuideLink(\'' + guide.id + '\')">🔗 复制文章链接</button></nav>' + guide.content.map(renderBlock).join('') + '<div class="article-end"><p>以上内容仅供信息参考，银行政策、费率及审批结果请以官方最新信息为准。</p><a class="btn" href="' + location.pathname + location.search + '">← 返回攻略列表</a></div></div></main>';
+    '<main class="wrap"><div class="article-body"><nav class="article-tools" aria-label="文章操作"><a class="back-link" href="' + location.pathname + location.search + '">← 返回攻略列表</a><button class="share-btn" type="button" onclick="copyGuideLink(\'' + guide.id + '\')">🔗 复制文章链接</button></nav>' +
+    '<div class="info-box"><b>📌 更新与核验：</b>' + updateNote + '</div>' + guide.content.map(renderBlock).join('') + '<div class="article-end"><p>以上内容仅供信息参考，银行政策、费率及审批结果请以相关机构最新官方信息为准。</p><a class="btn" href="' + location.pathname + location.search + '">← 返回攻略列表</a></div></div></main>';
   document.body.innerHTML = html;
   setArticleMeta(guide); window.history.replaceState(null, '', location.pathname + location.search + '#guide=' + encodeURIComponent(guide.id)); window.scrollTo(0, 0);
+  installArticleReadingTools();
+}
+
+function installArticleReadingTools() {
+  var progress = document.createElement('div'); progress.setAttribute('aria-hidden', 'true'); progress.style.cssText = 'position:fixed;left:0;top:0;width:0;height:3px;background:var(--green);z-index:100;transition:width .05s linear'; document.body.appendChild(progress);
+  var topBtn = document.createElement('button'); topBtn.type = 'button'; topBtn.className = 'to-top'; topBtn.textContent = '↑'; topBtn.setAttribute('aria-label', '回到顶部'); topBtn.hidden = true; topBtn.addEventListener('click', function(){window.scrollTo({top:0,behavior:'smooth'});}); document.body.appendChild(topBtn);
+  function sync(){ var max = document.documentElement.scrollHeight - window.innerHeight; var pct = max > 0 ? (window.scrollY / max) * 100 : 0; progress.style.width = pct + '%'; topBtn.hidden = window.scrollY < 520; }
+  window.addEventListener('scroll', sync, {passive:true}); sync();
 }
 function copyGuideLink(id) { var url = location.origin + location.pathname + location.search + '#guide=' + encodeURIComponent(id); if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(function(){alert('文章链接已复制');}).catch(function(){window.prompt('复制文章链接：',url);}); else window.prompt('复制文章链接：',url); }
 function showHome() { window.location.href = location.pathname + location.search; }
