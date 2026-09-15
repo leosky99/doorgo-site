@@ -1,0 +1,1 @@
+DoorGo SEO V2: publish sitemap with the production canonical hostname before enabling the Sitemap directive in robots.txt. Current sitemap is a baseline placeholder because the production domain is not stored in the repository.
