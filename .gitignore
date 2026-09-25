@@ -3,3 +3,7 @@
 
 # 付费 PDF 不进公开仓库，通过 release 私有附件/签名链接交付
 assets/*.pdf
+
+# 本地凭证/临时文件
+.env.production
+.env.local
