@@ -1,2 +1,5 @@
 .vercel
 .env*
+
+# 付费 PDF 不进公开仓库，通过 release 私有附件/签名链接交付
+assets/*.pdf
